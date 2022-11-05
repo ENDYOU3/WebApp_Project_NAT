@@ -8,9 +8,11 @@ Open CMD / Terminal
 ```python
 Open file location
 on terminal / cmd
-
-pipenv shell (run pipenv)
-pip install (install package)
+ 
+Activate a virtual environment
+  pipenv shell (run pipenv)
+Install all package in Pipfile
+  pipenv install (install package)
 ```
 ### Start Project
 
