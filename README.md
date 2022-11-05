@@ -24,7 +24,8 @@ on terminal / cmd
 python manage.py runserver
 ```
 ### Credits
-Picture of coffee
+```python
+Picture of coffee \n
 https://www.olivemagazine.com/recipes/collection/best-ever-coffee-recipes/
 Picture of Tea
 https://guide.michelin.com/us/en/article/features/7-varieties-of-green-tea-explained
