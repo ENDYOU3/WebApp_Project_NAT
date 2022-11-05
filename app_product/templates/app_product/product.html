@@ -1,0 +1,88 @@
+{% extends 'app_general/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Product | {{product.title}}</title>
+{% endblock %}
+
+{% block content %}
+{% if product is not None %}
+<div class="row bg-black" align="center">
+    <div class="col-2">
+        <a class="btn btn-black" href="{% url 'app_product:products-page' %}">
+            <svg style="color:rgb(130, 130, 130)" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z" />
+            </svg>
+        </a>
+    </div>
+</div>
+<div class="container text-white">
+    <br>
+    <p>
+        {% if product.photo %}
+        <img class="card-img-top" src="{{ product.photo.url }}" alt="Card image" style="width:50%">
+        {% endif %}
+    <div>
+        <a class="card-title fw-bolder text-white btn btn-success position-relative">
+            {{ product.title }} <small class="text-black text-end p-1">{{ product.product_code }}</small>
+            <!-- Check premium of product -->
+            {% if product.is_premium %}
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-black">
+                Premium!
+            </span>
+            {% endif %}
+        </a>
+        <!-- Check type of product -->
+        <div class="text-muted">
+            <h6>Product Type : {{ product.type }}</h6>
+        </div>
+    </div>
+    </p>
+    <p>
+        <!-- Check quantity of product -->
+        {% if product.quantity is not None %}
+        <b>Quantity : </b>{{ product.quantity }}
+        {% else %}
+        <h6 class="text-danger">There are no order yet!</h6>
+        {% endif %}
+    </p>
+    <p>
+        <!-- Update price of product -->
+        {% if product.special_price is not None %}
+        <b>Price : </b><del style="color:rgb(255, 90, 90)">{{ product.price | floatformat:'g' }} Bath</del>&nbsp{{ product.special_price | floatformat:'g' }} Bath
+        {% else %}
+        {% if product.price is not None %}
+        <b>Price : </b>{{ product.price | floatformat:'g' }} Bath
+        {% endif %}
+        {% endif %}
+    </p>
+    <p>
+        <!-- Check promotion of product -->
+        {% if product.promotion_end is not None %}
+        <b>Promotion End : </b>{{ product.promotion_end | date:'j N Y' }}
+        {% endif %}
+    </p>
+    <p>
+        <!-- Show description -->
+        <b>Description : </b><br>
+        &nbsp;&nbsp;&nbsp;&nbsp; {{ product.description }}
+    </p>
+    <p>
+        <!-- Update status of product -->
+        {% if product.quantity == 0 %}
+        <button type="button" class="card-title fw-bolder text-white btn btn-danger position-relative">Sold out</button>
+        {% else %}
+        {% if product.quantity is not None %}
+        <a type="button" class="card-title fw-bolder text-white btn btn-primary position-relative"
+            href="{% url 'app_general:add_to_cart-page' slug=product.slug %}">Add to Cart</a>
+        {% else %}
+        <button type="button" class="btn btn-danger fw-bold">Empty</button>
+        {% endif %}
+        {% endif %}
+    </p>
+</div>
+{% else %}
+<h3>Sorry we don't have product</h3>
+{% endif %}
+{% endblock %}

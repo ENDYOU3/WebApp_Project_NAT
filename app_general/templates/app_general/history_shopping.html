@@ -1,0 +1,60 @@
+{% extends 'app_general/base.html' %}
+
+{% block title %}
+<title>Cart | Project_NAT {{user.username}}</title>
+{% endblock %}
+
+{% block content %}
+<div class="text-white" align="center">
+    <h1>Order History</h1>
+</div>
+
+<form action="{% url 'app_general:cart_list-page' %}" method="POST">
+    {% csrf_token %}
+    <div class="container mt-3">
+        <!-- Check status of history shopping -->
+        {% if status == 0 %}
+        <div>
+            <h3 class="text-center text-muted">No Purchase History Showing</h3>
+        </div>
+        {% else %}
+        <div class="card">
+            <div class="card-header text-black fw-bold row">
+                <h4 class="text-center">
+                    {{ user.username }}
+                </h4>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    <!-- Show all history of your shopping -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantities</th>
+                                <th scope="col">Total Price</th>
+                            </tr>
+                        </thead>
+                        {% for data in history_shop %}
+                        <tbody>
+                            <tr>
+                                <th scope="row">{{ data.delivery }}</th>
+                                <td>{{ data.date }}</td>
+                                <td>{{ data.customer }}</td>
+                                <td>{{ data.product }}</td>
+                                <td class="text-center">{{ data.quantities }}</td>
+                                <td class="text-center">{{ data.total_price }}</td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

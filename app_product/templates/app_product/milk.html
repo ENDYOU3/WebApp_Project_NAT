@@ -1,0 +1,90 @@
+{% extends 'app_general/base.html' %}
+
+{% load static %}
+
+{% block title %}
+<title>Products | Milk</title>
+{% endblock %}
+
+{% block content %}
+<div class="container text-white" align="center">
+    <h1>Milk</h1>
+</div>
+{% if check_product == 0 %}
+<div class="container mt-3 text-muted text-center">
+    <h3>Sorry we don't have product.</h3>
+</div>
+{% else %}
+<div class="container mt-3 row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3">
+    {% for product in milk %}
+    <!-- Product detail -->
+    <div class="col">
+        <div class="card shadow-sm mb-1">
+            {% if product.photo %}
+            <img class="card-img-top" src="{{ product.photo.url }}" alt="Card image" style="width:100%">
+            {% endif %}
+            <small class="text-muted text-end p-1">{{ product.product_code }}</small>
+            <div class="card-body">
+                <a class="card-title fw-bold text-white btn btn-success position-relative"
+                    href="{% url 'app_product:product-page' product.product_code %}">
+                    {{ product.title }}
+                    {% if product.is_premium %}
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-black">
+                        Premium!
+                    </span>
+                    {% endif %}
+                </a>
+                <p class="card-text">
+                    <b> :: {{ product.type }} :: </b><br>
+                    <!-- Check quantity of product -->
+                    {% if product.quantity is not None %}
+                    <b>Quantity : </b>{{ product.quantity }}<br>
+                    {% else %}
+                    <b class="text-danger">There are no order yet!</b><br>
+                    {% endif %}
+                    <!-- Update price of product -->
+                    {% if product.special_price is not None %}
+                    <b>Price : </b><del style="color:rgb(255, 90, 90)">{{ product.price | floatformat:'g' }}
+                        Bath</del>{{ product.special_price | floatformat:'g' }} Bath<br>
+                    {% else %}
+                    {% if product.price is not None %}
+                    <b>Price : </b>{{ product.price | floatformat:'g' }} Bath<br>
+                    {% else %}
+                    <br>
+                    {% endif %}
+                    {% endif %}
+                    <!-- Check promotion end of product -->
+                    {% if product.promotion_end is not None %}
+                    <b>Promotion End : </b>{{ product.promotion_end | date:'j N Y' }}<br>
+                    {% else %}
+                    <br>
+                    {% endif %}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                        <!-- Update status of product -->
+                        {% if product.quantity == 0 %}
+                        <button type="button" class="btn btn-sm btn-danger fw-bold">Sold out</button>
+                        {% else %}
+                        {% if product.quantity is not None %}
+                        <a type="button" class="btn btn-sm btn-primary fw-bold"
+                            href="{% url 'app_general:add_to_cart-page' slug=product.slug %}">Add to Cart</a>
+                        {% else %}
+                        <button type="button" class="btn btn-sm btn-danger fw-bold">Empty</button>
+                        {% endif %}
+                        {% endif %}
+                        <a class="btn btn-sm btn-link" href="{% url 'app_product:product-page' product.product_code %}">
+                            Learn more
+                        </a>
+                    </div>
+                    <!-- Update date for edit -->
+                    <small class="text-muted">{{ product.updated | date:'j N Y' }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
